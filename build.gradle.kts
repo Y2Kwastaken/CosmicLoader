@@ -8,6 +8,7 @@ import kotlin.io.path.relativeTo
 
 plugins {
     id("java-library")
+    id("maven-publish")
 }
 
 val loaderVersion = project.properties["loader_version"] as String
@@ -86,4 +87,21 @@ tasks.register<Zip>("bundle") {
     dependsOn(tasks.getByPath("export"))
     destinationDirectory = file("build/")
     from(fileTree("build/libs"), fileTree("launchers"))
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("Maven") {
+            this.artifact(tasks.jar)
+        }
+    }
+
+    repositories {
+        maven("https://maven.miles.sh/snapshots") {
+            credentials {
+                this.username = System.getenv("PINEAPPLE_REPOSILITE_USERNAME")
+                this.password = System.getenv("PINEAPPLE_REPOSILITE_PASSWORD")
+            }
+        }
+    }
 }
