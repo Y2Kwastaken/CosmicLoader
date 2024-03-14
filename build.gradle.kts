@@ -74,8 +74,16 @@ tasks.register<Copy>("copyDependencies") {
     into("build/libs/libs")
 }
 
-tasks.register("liberate") {
-    group = "build"
+tasks.register("export") {
+    group = "cosmic-loader"
     dependsOn(tasks.jar)
     dependsOn(tasks.getByPath("copyDependencies"))
+}
+
+tasks.register<Zip>("bundle") {
+    group = "cosmic-loader"
+    archiveBaseName = "CosmicLoader"
+    dependsOn(tasks.getByPath("export"))
+    destinationDirectory = file("build/")
+    from(fileTree("build/libs"), fileTree("launchers"))
 }
