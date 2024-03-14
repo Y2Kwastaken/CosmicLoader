@@ -174,9 +174,9 @@ public class CosmicReachProvider implements GameProvider {
             Method m = c.getMethod("main", String[].class);
             m.invoke(null, (Object) arguments.toArray());
         } catch (InvocationTargetException e) {
-            throw new FormattedException("Mindustry has crashed!", e.getCause());
+            throw new FormattedException("Cosmic Reach has crashed!", e.getCause());
         } catch (ReflectiveOperationException e) {
-            throw new FormattedException("Failed to start Mindustry", e);
+            throw new FormattedException("Failed to start Cosmic Reach", e);
         }
     }
 
