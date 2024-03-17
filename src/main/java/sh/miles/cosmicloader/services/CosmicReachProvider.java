@@ -1,6 +1,9 @@
 package sh.miles.cosmicloader.services;
 
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FormattedException;
@@ -8,6 +11,7 @@ import net.fabricmc.loader.impl.game.GameProvider;
 import net.fabricmc.loader.impl.game.GameProviderHelper;
 import net.fabricmc.loader.impl.game.patch.GameTransformer;
 import net.fabricmc.loader.impl.launch.FabricLauncher;
+import net.fabricmc.loader.impl.lib.accesswidener.AccessWidener;
 import net.fabricmc.loader.impl.metadata.BuiltinModMetadata;
 import net.fabricmc.loader.impl.metadata.ContactInformationImpl;
 import net.fabricmc.loader.impl.util.Arguments;
@@ -191,7 +195,11 @@ public class CosmicReachProvider implements GameProvider {
                     Path.of(AbstractInsnNode.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
                     Path.of(Analyzer.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
                     Path.of(ASMifier.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
-                    Path.of(AdviceAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                    Path.of(AdviceAdapter.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
+                    Path.of(MixinExtrasBootstrap.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
+                    Path.of(AccessWidener.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
+                    Path.of(Gson.class.getProtectionDomain().getCodeSource().getLocation().toURI()),
+                    Path.of(BiMap.class.getProtectionDomain().getCodeSource().getLocation().toURI())
             ));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

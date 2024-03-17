@@ -17,7 +17,7 @@ val mixinExtraVersion = project.properties["mixin_extras_version"] as String
 val asmVersion = project.properties["asm_version"] as String
 
 group = "sh.miles.cosmicloader"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.1-SNAPSHOT"
 
 repositories {
     mavenLocal() // requires for cosmic reach

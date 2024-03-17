@@ -47,33 +47,30 @@ public class CosmicReachPatch extends GamePatch {
             throw new NoSuchMethodError("Could not find or inject into method \"main\"");
         }
 
-        injectTailInsn(initMethod, new MethodInsnNode(Opcodes.INVOKESTATIC, CosmicReachHooks.INTERNAL_NAME, "initClient", "()V", false));
+        injectAboveApplication(initMethod, new MethodInsnNode(Opcodes.INVOKESTATIC, CosmicReachHooks.INTERNAL_NAME, "initClient", "()V", false));
     }
 
     private void injectServer(ClassNode entrypoint) {
         throw new InjectionError("Cosmic Reach currently has no server so an injection in the server environment can not occur");
     }
 
-    /**
-     * @see org.spongepowered.asm.mixin.injection.points.BeforeFinalReturn#find
-     */
-    private static void injectTailInsn(MethodNode method, AbstractInsnNode injectedInsn) {
-        AbstractInsnNode ret = null;
+    private static void injectAboveApplication(final MethodNode method, AbstractInsnNode injectedInsn) {
+        AbstractInsnNode createApplication = null;
 
-        // RETURN opcode varies based on return type, thus we calculate what opcode we're actually looking for by inspecting the target method
-        int returnOpcode = Type.getReturnType(method.desc).getOpcode(Opcodes.IRETURN);
-        for (AbstractInsnNode insn : method.instructions) {
-            if (insn instanceof InsnNode && insn.getOpcode() == returnOpcode) {
-                ret = insn;
+        for (final AbstractInsnNode node : method.instructions) {
+            if (node instanceof MethodInsnNode methodNode && node.getOpcode() == Opcodes.INVOKESTATIC) {
+                Log.info(LogCategory.GAME_PATCH, "Found Method: " + methodNode.name);
+                if (methodNode.name.equals("createApplication")) {
+                    createApplication = methodNode;
+                }
             }
         }
 
-        // WAT?
-        if (ret == null) {
-            throw new RuntimeException("TAIL could not locate a valid RETURN in the target method!");
+        if (createApplication == null) {
+            throw new NoSuchMethodError("No such method createApplication in the visited method. This is a severe error!");
         }
 
-        method.instructions.insertBefore(ret, injectedInsn);
+        method.instructions.insertBefore(createApplication, injectedInsn);
     }
 
 }
