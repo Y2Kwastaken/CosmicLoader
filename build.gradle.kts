@@ -92,7 +92,7 @@ tasks.register<Zip>("bundle") {
 publishing {
     publications {
         create<MavenPublication>("Maven") {
-            this.artifact(tasks.jar)
+            from(components["java"])
         }
     }
 
